@@ -46,16 +46,16 @@ function sendFile( argResponse, argFilePath, argFileContents )
    * If not then it will read the file from the harddisk and then store its path
    	and its data in the cache object and then send its data across.
 */
-function serveStatic( argResponse, argAbsPath )
+function serveStatic( argResponse, argFilePath )
 {
 	// cache is supposed to contain: [path, data]
 
 	// If the path exists in cache object, then fetch its corresponding data and 
 	// send it across.
-	if( cache[ argAbsPath ] )
+	if( cache[ argFilePath ] )
 	{
 		// cache is an object. When we write cache[argAbsPath], its data is accessed.
-		sendFile( argResponse, argAbsPath, cache[ argAbsPath ] )
+		sendFile( argResponse, argFilePath, cache[ argFilePath ] )
 	}
 	else
 	{
@@ -66,13 +66,14 @@ function serveStatic( argResponse, argAbsPath )
 		// fs.constants.R_OK: Checks if the file is readable.
 		// fs.constants.W_OK: Checks if the file is writable.
 
-		fs.access( argAbsPath, 
+		fs.access( argFilePath, 
 				   fs.constants.F_OK | fs.constants.R_OK, 
 				   (argError) => 
 				   			{
+								   console.log(argFilePath)
 								if( !argError )
 								{
-									fs.readFile( argAbsPath, function( argError, argData )
+									fs.readFile( argFilePath, function( argError, argData )
 															 {
 																if( argError )
 																{
@@ -95,10 +96,34 @@ function serveStatic( argResponse, argAbsPath )
 	}
 }
 
+var server = http.createServer( function( argRequest, argResponse )
+								{
+									// Find the file which the browser is requesting:
+									// If the user has typed '/' then by default we will send index.html.
+									// If it is something else then we will find that file and then send it.
+									var filePath = ""
+									if( argRequest.url === '/')
+									{
+										filePath = './public/index.html'
+									}
+									else
+									{
+										filePath = './public/' + argRequest.url
+									}
 
+									// This function is going to check whether the file is cached or not.
+									// If not, then it will attempt to find the file, cache it, and then
+									// send it across.
+									// IF yes, then it will find the file in cache and send it from there.
+									serveStatic( argResponse, filePath )
+								}
+							)
 
-
-
+server.listen( 3000, function()
+					 {
+						console.log("Server listening on port 3000!")
+					 }
+			 )
 
 
 
