@@ -86,6 +86,10 @@ function serveStatic( argResponse, argAbsPath )
 															 }
 												)
 								}
+								else
+								{
+									send404( argResponse )
+								}
 							}
 				 )
 	}
