@@ -1,0 +1,41 @@
+
+body {
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+    color: "#00b7ff"
+}
+
+/* 
+    Words starting with # represent id.
+    'content' is the id of a div in index.html. 
+    Application will be 800px wide and horizontally centered. 
+*/
+#content {
+    background-color: aquamarine;
+    width:          800px;
+    height:         300px;
+    margin-left:    auto;
+    margin-right:   auto;
+    border:         2px solid blueviolet;
+}
+
+/* 'room' is the id of a div in 'index.html' */
+#room {
+    background-color:burlywood;
+    margin-bottom: 1em;
+}
+
+/* 'messages' is the id of a div in 'index.html' */
+#messages {
+    width:          690px;
+    height:         300px;
+    /* Deals with those items which are too big to fit in the given space. */
+    overflow:       scroll;
+    background-color:cadetblue;
+    margin-bottom:  1em;
+    margin-right:   10px;
+    border:         2px solid blue;
+}
