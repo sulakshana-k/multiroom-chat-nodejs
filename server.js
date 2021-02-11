@@ -4,11 +4,13 @@ var fs 		= require('fs')
 var path 	= require('path')
 
 // To determine mime type based on file extension. 
+// We need to send file type with response to the browser.
 var mime 	= require('mime')
 
 // Contents of cached files.
-// This will contain path of the file and its data.
-var cache = {}
+// This will contain path of the file and its data so that we don't
+// have to fetch it again and again from the server.
+var cache 	= {}
 
 // : called when the file requested by browser does not exist. 
 function send404( argResponse )
@@ -53,15 +55,22 @@ function serveStatic( argResponse, argFilePath )
 	// If the path exists in cache object, then fetch its corresponding data and 
 	// send it across.
 	if( cache[ argFilePath ] )
-	{
-		// cache is an object. When we write cache[argAbsPath], its data is accessed.
+	{		
+		// We need to send 'argFilePath' to 'sendFile' function because to send response
+		// we need to determine the type of the file since it is necessary to specify 
+		// type of the file in response.
+		// Type of the file can be determined by analysing the extension of the file.
+
+		// cache is an object. When we write cache[argAbsPath], its data is accessed.		
 		sendFile( argResponse, argFilePath, cache[ argFilePath ] )
 	}
 	else
 	{
-		// Read the file from the harddisk
-		// fs.exists is deprecated
+		// Read the file from the harddisk.
+		// 'fs.exists' is deprecated, hence 'fs.access' is being used here
+		// to check the existence of the file.
 
+		// These are the macros for 'fs.access'.
 		// fs.constants.F_OK: Checks the existence of file.
 		// fs.constants.R_OK: Checks if the file is readable.
 		// fs.constants.W_OK: Checks if the file is writable.
@@ -70,7 +79,8 @@ function serveStatic( argResponse, argFilePath )
 				   fs.constants.F_OK | fs.constants.R_OK, 
 				   (argError) => 
 				   			{
-								   console.log(argFilePath)
+								console.log( argFilePath )
+								// If there is no error:
 								if( !argError )
 								{
 									fs.readFile( argFilePath, function( argError, argData )
@@ -79,6 +89,8 @@ function serveStatic( argResponse, argFilePath )
 																{
 																	send404( argResponse )
 																}
+																// If the file exists and can be read, put it in 
+																// the cache object and then send its data across.
 																else
 																{
 																	cache[argFilePath] = argData
@@ -96,8 +108,12 @@ function serveStatic( argResponse, argFilePath )
 	}
 }
 
+// 'createServer' will listen on a port for the browser's requests.
+// Returns a server object on which 'listen' can be called to listen
+// on a specific port number.
 var server = http.createServer( function( argRequest, argResponse )
 								{
+									console.log("createServer: We got a hit @ " + new Date());          
 									// Find the file which the browser is requesting:
 									// If the user has typed '/' then by default we will send index.html.
 									// If it is something else then we will find that file and then send it.
@@ -108,20 +124,22 @@ var server = http.createServer( function( argRequest, argResponse )
 									}
 									else
 									{
-										filePath = './public/' + argRequest.url
+										// In this case the '/' is already attached to the begining of the
+										// path of 'argRequest.url'.
+										filePath = './public' + argRequest.url
 									}
 
-									// This function is going to check whether the file is cached or not.
+									// This function is going to check whether the file is already cached or not.
 									// If not, then it will attempt to find the file, cache it, and then
-									// send it across.
-									// IF yes, then it will find the file in cache and send it from there.
+									// send its contents across.
+									// IF yes, then it will find the file in cache and send its contents from there.
 									serveStatic( argResponse, filePath )
 								}
 							)
 
 server.listen( 3000, function()
 					 {
-						console.log("Server listening on port 3000!")
+						console.log("\nlisten: Server listening on port 3000!\n")
 					 }
 			 )
 

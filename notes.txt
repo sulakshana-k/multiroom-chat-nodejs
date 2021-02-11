@@ -26,3 +26,20 @@
 	}
 
 6. create file 'server.js' in the main dir.
+
+7. Websockets:
+		Websockets use TCP/IP communication protocol which interacts between browsers
+		and server. Websockets are built on top of normal TCP/IP sockets.
+		
+		There are more important differences on the receiving side of things. 
+		When the receiver does a recv (or read) on a TCP socket, there is no guarantee 
+		that the number of bytes returned corresponds to a single send (or write) on the 
+		sender side. It might be the same, it may be less (or zero) and it might even be 
+		more (in which case bytes from multiple send/writes are received). 
+		With WebSockets, the recipient of a message is event-driven (you generally register 
+		a message handler routine), and the data in the event is always the entire message 
+		that the other side sent.
+
+		https://stackoverflow.com/a/16947118
+
+
