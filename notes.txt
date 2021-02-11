@@ -1,4 +1,5 @@
 1. // server side logic
+	// 'socket.io' logic will be in /lib. 
 	mkdir lib 
 
 2. // client side webbrowser files
@@ -42,4 +43,14 @@
 
 		https://stackoverflow.com/a/16947118
 
+		'socket.io' is a wraper around WebSockets
+
+
+8. socket.io:
+		'socket.io' provides virtual channels to which users can subscribe. This way each 
+		message won't have to be sent to all the users.
+
+		'socket.io' has event emitters.	
+
+9. nodejs server vs http server vs socket.io server
 

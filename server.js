@@ -144,7 +144,11 @@ server.listen( 3000, function()
 			 )
 
 
+var chatServer = require('./lib/chat_server')
 
+// 'socket.io' server is piggybanking of http server.
+// They are sharing same port.s
+chatServer.listenSocketIO( server )
 
 
 
