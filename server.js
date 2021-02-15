@@ -111,6 +111,11 @@ function serveStatic( argResponse, argFilePath )
 // 'createServer' will listen on a port for the browser's requests.
 // Returns a server object on which 'listen' can be called to listen
 // on a specific port number.
+
+// Whenever the browser asks for a url, this callback function of 'createServer'
+// gets called.
+// Server is created once and the callback keeps on getting called repeatedly
+// whenever browser asks for a url. 
 var server = http.createServer( function( argRequest, argResponse )
 								{
 									console.log("createServer: We got a hit @ " + new Date());          
@@ -144,26 +149,12 @@ server.listen( 3000, function()
 			 )
 
 
+// This is about 'socket.io'. Its logic is written in 'chat_server.js'.
 var chatServer = require('./lib/chat_server')
 
-// 'socket.io' server is piggybanking of http server.
-// They are sharing same port.s
+// 'socket.io' server is piggybanking on http server.
+// They are sharing same ports.
 chatServer.listenSocketIO( server )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
