@@ -54,9 +54,28 @@
 
 9. nodejs server vs http server vs socket.io server
 
-10. 'chat_ui.js' contains JQuery for controlling HTML(DOM) code of 'index.html'.
-11. 'chat.js' contains functions for changing usernames and roomnames.
-	It emits signals for room change, name change, and messages.
-12. 'chat_server.js' contains slots which listen to room changes, name changes, and new messages,
+10. 'chat_server.js' contains slots which listen to room changes, name changes, and new messages,
 	and it broadcasts these information to other users and rooms.
+11. 'chat_ui.js' contains JQuery for controlling HTML(DOM) code of 'index.html'.
+12. 'chat.js' contains functions for changing usernames and roomnames.
+	It emits signals for room change, name change, and messages.
+
+13. Currently(22 Feb 2021 Mon) when a user refreshes the browser's page, the nodejs chat server
+	thinks that a new person has joined the chat room.
+	This is the time when in 'chat_server.js', 'io.sockets.on' connection callback is called in
+	function 'exports.listen'.
+
+	In this function for the first time, guest name is assigned, user is placed in lobby, and
+	message is broadcasted.
+
+	When the guest is given a name, 'nameResult' event/signal is emitted which is received
+	by 'chat_ui.js' JQuery which actually appends the message in HTML(DOM).
+	Similarily all events pertaining to a new person (signalled by browser refresh) are emitted
+	by 'char_server.js' and received by 'chat_ui.js' JQuery which deals with html. 
+
+14. 'server.js' ---> 'http'
+	'chat_server.js' ---> 'socket.io' is piggybanking on server.js 'http' server.
+	'chat_ui.js' ---> 'socket = io.connect' is passing socket to 'chat.js'. 
+
+
 
