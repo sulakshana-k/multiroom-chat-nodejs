@@ -54,3 +54,9 @@
 
 9. nodejs server vs http server vs socket.io server
 
+10. 'chat_ui.js' contains JQuery for controlling HTML(DOM) code of 'index.html'.
+11. 'chat.js' contains functions for changing usernames and roomnames.
+	It emits signals for room change, name change, and messages.
+12. 'chat_server.js' contains slots which listen to room changes, name changes, and new messages,
+	and it broadcasts these information to other users and rooms.
+

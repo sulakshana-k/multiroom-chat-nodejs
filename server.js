@@ -76,10 +76,10 @@ function serveStatic( argResponse, argFilePath )
 		// fs.constants.W_OK: Checks if the file is writable.
 
 		fs.access( argFilePath, 
-				   fs.constants.F_OK | fs.constants.R_OK, 
+				   //fs.constants.F_OK | fs.constants.R_OK, 
 				   (argError) => 
 				   			{
-								console.log( argFilePath )
+								console.log( 'From serveStatic else ', argFilePath )
 								// If there is no error:
 								if( !argError )
 								{
@@ -122,7 +122,7 @@ var server = http.createServer( function( argRequest, argResponse )
 									// Find the file which the browser is requesting:
 									// If the user has typed '/' then by default we will send index.html.
 									// If it is something else then we will find that file and then send it.
-									var filePath = ""
+									var filePath = false
 									if( argRequest.url === '/')
 									{
 										filePath = './public/index.html'
@@ -138,6 +138,7 @@ var server = http.createServer( function( argRequest, argResponse )
 									// If not, then it will attempt to find the file, cache it, and then
 									// send its contents across.
 									// IF yes, then it will find the file in cache and send its contents from there.
+									console.log('before serveStatic ', filePath)
 									serveStatic( argResponse, filePath )
 								}
 							)
@@ -154,7 +155,7 @@ var chatServer = require('./lib/chat_server')
 
 // 'socket.io' server is piggybanking on http server.
 // They are sharing same ports.
-chatServer.listenSocketIO( server )
+chatServer.listen( server )
 
 
 
