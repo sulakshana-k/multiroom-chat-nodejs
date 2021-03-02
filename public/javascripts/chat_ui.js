@@ -42,13 +42,19 @@ function processUserInput(chatApp, socket)
     $('#send-message').val('');
 }
 
+// Client's socket API.
 var socket = io.connect();
 
+// When DOM has loaded fully.
+// $ represents jquery.
 $(document).ready( function() 
                     {
                         console.log('ready --- chat_ui.js')
                         var chatApp = new Chat( socket );
-                        socket.on('nameResult', function(result) 
+
+                        // This is a slot which will listen for 'nameResult' event. 
+                        // 'nameResult' event will be emitted by 'chat_server.js'. 
+                        socket.on('nameResult', function( result ) 
                                                 {
                                                     var message;
                                                     if (result.success) 
@@ -59,7 +65,8 @@ $(document).ready( function()
                                                     {
                                                         message = result.message;
                                                     }
-                                                    $('#messages').append(divSystemContentElement(message));
+                                                    // We will append the result in the HTML element.
+                                                    $('#messages').append( divSystemContentElement( message ) );
                                                 }
                                 );
                     
@@ -70,13 +77,13 @@ $(document).ready( function()
                                                 }
                                 );
                         
-                        socket.on('message', function (message) 
-                                            {
+                        socket.on('message', function(message) 
+                                             {
                                                 var newElement = $('<div></div>').text(message.text);
                                                 $('#messages').append(newElement);
-                                            }
+                                             }
                                 );
-                        socket.on('rooms', function(rooms) 
+                        socket.on('rooms', function(rooms)
                                             {
                                                 $('#room-list').empty();
                                                 for(var room in rooms) 

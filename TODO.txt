@@ -1,2 +1,4 @@
 
 1. Install socket.io version 3.
+
+2. server io vs client io

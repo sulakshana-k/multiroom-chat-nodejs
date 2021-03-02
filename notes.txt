@@ -52,7 +52,61 @@
 
 		'socket.io' has event emitters.	
 
-9. nodejs server vs http server vs socket.io server
+9. "nodejs server" vs "http server" vs "socket.io server"
+
+HTTP:
+	'http' server is unidirectional. This means that client sends the request to the 
+	server and the server responds. Then the conection closes by itself. 
+	
+	Each http request from client to server establishes a new connection.
+	Http is stateless protocol. This means each time a connection forms, it doesn't
+	remember what happened previously.
+
+	Http runs on top of TCP which is a connection oriented protocol.
+	REST API like GET, POST are related to HTTP.
+
+	Http 1.1 is a full duplex connection protocol. This means that data can be transmitted
+	in both direction at the same time. Server or client don't have to wait for the other
+	to complete what the other is saying.
+
+	Example of a half-duplex system is a 'walkie-talkie'. Here you have to push a button 
+	to be able to speak. When we speak we can't hear. Then we push the button only for
+	hearing and can't speak.
+	_______________________________________________________________________________
+
+	'socket.io' falls under websocket category. 
+	Websocket is a full-duplex protocol. It is a stateful protocol. Once extablished it 
+	remains alive till the either party closes it and then the connection is terminated
+	from both ends.
+
+	Websockets should be used when the client needs to show the updated data consistantly.
+	Example: Games, Chat.
+
+	Http connections are slower than websockets because a TCP connection with handshake 
+	has to be established every time a client sends a request to the server.
+
+
+Advantages of Websockets over HTTP:
+	1. With websockets whenever the server has got some important event related to the 
+		browser, it can emit it and it will be received by the browser.
+		This technique is not possible with the HTTP since the connection gets terminated
+		after one response by the server is sent.
+
+	2. With HTTP, communication will be slow since connection has to be established every
+		time the browser wants something from the server.
+		With websockets, once the connection is established it remains intact till it is 
+		purposefully ended by the either party.
+
+	3. With HTTP there will be a lot of overhead per message as compared to the websockets.
+		Everytime a connection is formed, the header field is filled with cookies and meta
+		information for each request.
+
+		Whereas for websockets, the header information is sent once, and then we send normal
+		messages on an already established connection. So, those heavy headers do not have
+		to be sent repeatedly.
+
+
+
 
 10. 'chat_server.js' contains slots which listen to room changes, name changes, and new messages,
 	and it broadcasts these information to other users and rooms.
