@@ -47,7 +47,7 @@ Chat.prototype.processCommand = function( command )
                                     console.log('processCommand --- chat.js')
                                 
                                     var words = command.split(' ');
-                                    var command = words[0].substring(1, words[0].length).toLowerCase();
+                                    var command = words[0].substring( 1, words[0].length ).toLowerCase();
                                     var message = false;
                                     switch( command ) 
                                     {
